@@ -101,12 +101,19 @@ const Update = (props) => {
             placeholder="제목"
             value={title}
             onChange={(e) => {
-              console.log(e.target.value);
+              setTitle(e.target.value);
             }}
           />
         </p>
         <p>
-          <textarea name="body" placeholder="body" value={body}></textarea>
+          <textarea
+            name="body"
+            placeholder="body"
+            value={body}
+            onChange={(e) => {
+              setBody(e.target.value);
+            }}
+          ></textarea>
         </p>
         <p>
           <input type="submit" value="Update" />
@@ -177,7 +184,24 @@ function App() {
         body = topics[i].body;
       }
     }
-    content = <Update title={title} body={body} onUpdate={(title, body) => {}}></Update>;
+    content = (
+      <Update
+        title={title}
+        body={body}
+        onUpdate={(title, body) => {
+          const newTopics = [...topics];
+          const updatedTopic = { id: id, title: title, body: body };
+          for (let i = 0; i < newTopics.length; i++) {
+            if (newTopics[i].id === id) {
+              newTopics[i] = updatedTopic;
+              break;
+            }
+          }
+          setTopics(newTopics);
+          setMode('READ');
+        }}
+      ></Update>
+    );
   }
   return (
     <div className="App">
